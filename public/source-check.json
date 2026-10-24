@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T11:49:09.060Z",
+  "generated_at": "2026-10-24T12:23:58.980Z",
   "sourceChecks": [
     {
       "name": "Codex Reset feed",
@@ -20,7 +20,7 @@
         "zh": "最新时间线 79 条；69 条已确认/归档，10 条待确认记录不计入模型。",
         "en": "79 timeline events; 69 confirmed/archive events used, 10 pending rows excluded."
       },
-      "updatedAt": "2026-10-24T11:47:48.887Z"
+      "updatedAt": "2026-10-24T12:22:49.455Z"
     },
     {
       "name": "Codex 雷达站",
@@ -29,8 +29,8 @@
       "role": "cross-check",
       "day": 19,
       "note": {
-        "zh": "页面当前标记 Day 19；Day 18 已由站点确认，但 Tibo 尚未发布独立完成帖。",
-        "en": "Page currently shows Day 19; Day 18 is confirmed by the site, but Tibo has not posted a separate completion update."
+        "zh": "页面当前标记 Day 19；Day 17 仍待确认，Day 18 已由站点确认；Tibo 尚未发布独立完成帖。",
+        "en": "Page currently shows Day 19; Day 17 is pending, and Day 18 is confirmed by the site; Tibo has not posted a separate completion update"
       },
       "resetNotice": "本次重置已完成 · 站长确认"
     },
@@ -41,8 +41,8 @@
       "role": "cross-check",
       "day": 18,
       "note": {
-        "zh": "独立追踪站记录 Day 18 已到账；界面采用 Tibo 原帖时间，后台精确执行时刻仍未知。",
-        "en": "Independent tracker records Day 18 as landed; the UI uses Tibo’s public post time while the exact backend execution time remains unknown."
+        "zh": "独立追踪站记录 Day 17、18 已到账；界面采用 Tibo 原帖时间，后台精确执行时刻仍未知。",
+        "en": "Independent tracker records Day 17 and 18 as landed; the UI uses Tibo’s public post time while the exact backend execution time remains unknown."
       },
       "updatedAt": "2026-10-23T17:58:13.332Z"
     },
@@ -52,8 +52,8 @@
       "status": "fresh",
       "role": "cross-check",
       "note": {
-        "zh": "独立追踪站将 Day 18 标为已完成，并给出一个记录时间；该时间仍属于第三方报告。",
-        "en": "Independent tracker marks Day 18 complete and reports a timestamp; it remains a third-party report."
+        "zh": "独立追踪站将 Day 17、18 标为已完成，并给出记录时间；这些时间仍属于第三方报告。",
+        "en": "Independent tracker marks Day 17 and 18 complete and reports timestamps; they remain third-party reports."
       },
       "updatedAt": "2026-10-23T17:00:00+00:00"
     },
@@ -63,18 +63,34 @@
       "status": "fresh",
       "role": "cross-check",
       "note": {
-        "zh": "日志站将 Day 18 列入 19 天中的已重置日期；未提供独立精确完成时刻。",
-        "en": "Log site includes Day 18 among the resets in the 19-day run; it does not provide an independent exact completion time."
+        "zh": "日志站将 Day 17、18 列入已重置日期；未提供独立精确完成时刻。",
+        "en": "Log site includes Day 17 and 18 among the resets; it does not provide an independent exact completion time."
       }
     }
   ],
   "validation": {
     "note": {
-      "zh": "当前为 Day 19；Day 18 已由 4 个公开追踪来源交叉确认。页面显示时间采用 Tibo 原帖的公开时间（10 月 23 日 12:46，北京时间），后台精确执行时刻仍未知。",
-      "en": "Current status is Day 19; Day 18 is cross-checked by 4 public trackers. The displayed time uses Tibo’s public post timestamp (Oct 23, 04:46 UTC); the exact backend execution time remains unknown."
+      "zh": "当前为 Day 19；Day 17 已由 3 个来源确认；Day 18 已由 4 个来源确认。页面显示时间采用对应 Tibo 原帖的公开时间，后台精确执行时刻仍未知。",
+      "en": "Current status is Day 19; Day 17 已由 3 个来源确认; Day 18 已由 4 个来源确认. Displayed times use the corresponding Tibo post timestamps; exact backend execution times remain unknown."
     }
   },
   "validatedResets": [
+    {
+      "id": "cross-source-day17",
+      "day": 17,
+      "date": "2026-10-22",
+      "at": "2026-10-22T06:55:22.000Z",
+      "text": "Day 17/ Bet you thought we forgot, but no, it’s reset day today.\n\nAlso good time to remind you to get Daybreak Blue access, it only takes 15 mins and you don’t want to have to do it in the middle of an incident.",
+      "url": "https://x.com/thsottiaux/status/2113162277688070445",
+      "source": "多站点交叉核验",
+      "status": "verified",
+      "precision": "post-timestamp",
+      "evidence": [
+        "Codex Reset Watch",
+        "Reset Tracker",
+        "LimitDigest"
+      ]
+    },
     {
       "id": "cross-source-day18",
       "day": 18,

@@ -80,11 +80,6 @@ h2 { font-size: 18px; letter-spacing: -.04em; margin: 8px 0 0; }
 .source-link { display: inline-block; margin: 28px 0 22px 29px; color: var(--cyan); text-decoration: none; font: 11px var(--mono); }
 .method-line { border-top: 1px solid var(--line); padding-top: 15px; color: var(--muted); font-size: 11px; display: flex; gap: 8px; align-items: center; }
 .method-dot { width: 7px; height: 7px; background: var(--violet); border-radius: 50%; }
-.source-checks { border-top: 1px solid var(--line); margin-top: 15px; padding-top: 11px; display: flex; flex-direction: column; gap: 7px; }
-.source-check { display: flex; align-items: center; gap: 7px; color: var(--muted); font: 10px var(--mono); }
-.source-check i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex: 0 0 auto; }
-.source-check.unavailable i { background: var(--coral); }
-.source-check small { color: #69728f; font: inherit; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .history-panel { margin-top: 14px; }
 .history-calendar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; margin-top: 22px; }
 .history-month h3 { margin: 0 0 12px; color: #dfe5fa; font: 500 14px var(--mono); text-align: center; }

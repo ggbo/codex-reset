@@ -12,6 +12,10 @@ npm start
 
 打开 <http://localhost:8787>。
 
+## GitHub Pages
+
+仓库 `ggbo/codex-reset` 的 `main` 分支包含 Pages 工作流，静态站点内容位于 `public/`。如果 GitHub 账户尚未启用 Pages，需要在仓库的 **Settings → Pages → Source** 选择 **GitHub Actions**；启用后，下一次推送会发布到 <https://ggbo.github.io/codex-reset/>。当前还准备了 `gh-pages` 分支作为静态快照。
+
 默认数据源是公开的 `https://codex-reset.com/api/feed`，它提供已经整理好的 Tibo 公开动态与事件记录。为了方便独立部署，服务支持通过 `FEED_URL` 替换成自己的抓取器；网络不可用时会自动使用 `data/seed-feed.json`。
 
 ```bash

@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-10-24T10:24:12.568Z",
+  "sourceChecks": [
+    {
+      "name": "Codex Reset feed",
+      "url": "https://codex-reset.com/api/feed",
+      "status": "fresh",
+      "role": "primary",
+      "note": {
+        "zh": "结构化公开动态与重置事件，参与预测计算。",
+        "en": "Structured public posts and reset events used by the forecast."
+      }
+    },
+    {
+      "name": "Codex 雷达站",
+      "url": "https://codex-reset-radar.pages.dev/",
+      "status": "fresh",
+      "role": "cross-check",
+      "day": 19,
+      "note": {
+        "zh": "页面当前标记 Day 19；仅作交叉参考，不直接改变概率。",
+        "en": "Page currently shows Day 19; cross-check only, not a probability input."
+      },
+      "resetNotice": "本次重置已完成 · 站长确认"
+    }
+  ]
+}

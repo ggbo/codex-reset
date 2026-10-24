@@ -9,6 +9,7 @@ const PUBLIC_DIR = path.join(ROOT, 'public');
 const SEED_PATH = path.join(ROOT, 'data', 'seed-feed.json');
 const PORT = Number(process.env.PORT || 8787);
 const FEED_URL = process.env.FEED_URL || 'https://codex-reset.com/api/feed';
+const RADAR_URL = process.env.RADAR_URL || 'https://codex-reset-radar.pages.dev/';
 const CACHE_MS = Number(process.env.CACHE_MS || 120_000);
 
 let cache = { value: null, fetchedAt: 0, promise: null };
@@ -237,9 +238,48 @@ async function readSeed() {
 }
 
 async function fetchJson(url) {
-  const response = await fetch(url, { headers: { 'user-agent': 'codex-reset-radar/0.1' } });
+  const response = await fetch(url, { headers: { 'user-agent': 'codex-reset-radar/0.1' }, signal: AbortSignal.timeout(10_000) });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json();
+}
+
+async function fetchText(url) {
+  const response = await fetch(url, { headers: { 'user-agent': 'codex-reset-radar/0.1' }, signal: AbortSignal.timeout(5_000) });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.text();
+}
+
+function stripTags(value) {
+  return String(value || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+async function loadCrossSource() {
+  try {
+    const html = await fetchText(RADAR_URL);
+    const spotlightDay = html.match(/t28-spotlight[\s\S]{0,300}?Day\s+(\d+)\b/i)?.[1];
+    const noticeDay = html.match(/site-day(\d+)-notice/i)?.[1];
+    const dayMatches = [...html.matchAll(/Day\s+(\d+)\b/gi)].map(match => Number(match[1])).filter(Number.isFinite);
+    const resetMatch = html.match(/本次重置已完成[^<]{0,180}/i);
+    const day = Number(spotlightDay || noticeDay || (dayMatches.length ? Math.max(...dayMatches) : 0)) || null;
+    return {
+      name: 'Codex 雷达站',
+      url: RADAR_URL,
+      status: 'fresh',
+      role: 'cross-check',
+      day,
+      note: {
+        zh: day ? `页面当前标记 Day ${day}；仅作交叉参考，不直接改变概率。` : '页面可访问；未提取到明确 Day 标记。',
+        en: day ? `Page currently shows Day ${day}; cross-check only, not a probability input.` : 'Page reachable; no clear Day marker was extracted.'
+      },
+      resetNotice: stripTags(resetMatch?.[0] || '') || null
+    };
+  } catch (error) {
+    return {
+      name: 'Codex 雷达站', url: RADAR_URL, status: 'unavailable', role: 'cross-check', day: null,
+      note: { zh: '交叉站点暂时不可访问；不影响主 feed。', en: 'Cross-check site unavailable; primary feed is still used.' },
+      error: error instanceof Error ? error.message : String(error)
+    };
+  }
 }
 
 async function loadState(force = false) {
@@ -250,12 +290,20 @@ async function loadState(force = false) {
     try {
       const raw = await fetchJson(FEED_URL);
       const value = normalizeFeed(raw, `公开 feed · ${new URL(FEED_URL).hostname}`);
+      value.sourceChecks = [
+        { name: 'Codex Reset feed', url: FEED_URL, status: 'fresh', role: 'primary', note: { zh: '结构化公开动态与重置事件，参与预测计算。', en: 'Structured public posts and reset events used by the forecast.' } },
+        await loadCrossSource()
+      ];
       cache = { value, fetchedAt: Date.now(), promise: null };
       return value;
     } catch (error) {
       const seed = await readSeed();
       const value = normalizeFeed(seed, '本地种子数据（网络源暂不可用）');
       value.stale = true;
+      value.sourceChecks = [
+        { name: 'Codex Reset feed', url: FEED_URL, status: 'unavailable', role: 'primary', note: { zh: '主 feed 不可用，当前使用本地种子数据。', en: 'Primary feed unavailable; using local seed data.' } },
+        await loadCrossSource()
+      ];
       value.error = error instanceof Error ? error.message : String(error);
       cache = { value, fetchedAt: Date.now(), promise: null };
       return value;

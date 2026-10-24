@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T10:24:12.568Z",
+  "generated_at": "2026-10-24T10:52:07.367Z",
   "sourceChecks": [
     {
       "name": "Codex Reset feed",
@@ -7,9 +7,20 @@
       "status": "fresh",
       "role": "primary",
       "note": {
-        "zh": "结构化公开动态与重置事件，参与预测计算。",
-        "en": "Structured public posts and reset events used by the forecast."
+        "zh": "只把已确认/归档事件纳入历史样本。",
+        "en": "Only confirmed/archive events enter the historical sample."
       }
+    },
+    {
+      "name": "Codex Reset timeline",
+      "url": "https://codex-reset.com/api/timeline",
+      "status": "fresh",
+      "role": "validation",
+      "note": {
+        "zh": "最新时间线 79 条；69 条已确认/归档，10 条待确认记录不计入模型。",
+        "en": "79 timeline events; 69 confirmed/archive events used, 10 pending rows excluded."
+      },
+      "updatedAt": "2026-10-24T10:51:02.580Z"
     },
     {
       "name": "Codex 雷达站",
@@ -18,10 +29,16 @@
       "role": "cross-check",
       "day": 19,
       "note": {
-        "zh": "页面当前标记 Day 19；仅作交叉参考，不直接改变概率。",
-        "en": "Page currently shows Day 19; cross-check only, not a probability input."
+        "zh": "页面当前标记 Day 19；Day 18 的完成时间未知，官方证据仍待确认，不直接改变概率。",
+        "en": "Page currently shows Day 19; the Day 18 completion time is unknown and official evidence is still pending; it is not a probability input."
       },
       "resetNotice": "本次重置已完成 · 站长确认"
     }
-  ]
+  ],
+  "validation": {
+    "note": {
+      "zh": "两站点都显示 Day 18 已完成，但实际时间未知且官方证据待确认；因此不把这条记录当作精确时间或实时预告。",
+      "en": "Both sites show Day 18 completed, but the actual time is unknown and official evidence is pending; it is not treated as an exact timestamp or live promise."
+    }
+  }
 }

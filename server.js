@@ -9,6 +9,7 @@ const PUBLIC_DIR = path.join(ROOT, 'public');
 const SEED_PATH = path.join(ROOT, 'data', 'seed-feed.json');
 const PORT = Number(process.env.PORT || 8787);
 const FEED_URL = process.env.FEED_URL || 'https://codex-reset.com/api/feed';
+const TIMELINE_URL = process.env.TIMELINE_URL || 'https://codex-reset.com/api/timeline';
 const RADAR_URL = process.env.RADAR_URL || 'https://codex-reset-radar.pages.dev/';
 const CACHE_MS = Number(process.env.CACHE_MS || 120_000);
 
@@ -59,6 +60,14 @@ function textOf(item) {
 
 function isBanked(text) {
   return /\bbanked\b|on[- ]demand|credit(?:ed|s)?\s+(?:to|into)|reset\s+card/i.test(text);
+}
+
+function isVerifiedResetEvent(event) {
+  const status = String(event?.reset_verification_status || '').toLowerCase();
+  const source = String(event?.source || '').toLowerCase();
+  const sourceLabel = String(event?.source_label || '').toLowerCase();
+  if (status === 'pending' || source.includes('operator-observed') || sourceLabel.includes('awaiting')) return false;
+  return event?.confirmed === true || String(event?.confidence || '').toLowerCase() === 'high' || source.includes('archive');
 }
 
 function isResetClaim(text) {
@@ -143,6 +152,7 @@ function normalizeFeed(raw, source) {
     url: item.url || `https://x.com/thsottiaux/status/${item.id || ''}`,
     isReply: Boolean(item.is_reply),
     kind: item.kind || null,
+    candidate: Boolean(item.reset_verification_candidate) || String(item.kind || '').toLowerCase() === 'candidate',
     likes: Number(item.likes || 0),
     replies: Number(item.replies || 0),
     reposts: Number(item.reposts || 0)
@@ -150,7 +160,7 @@ function normalizeFeed(raw, source) {
   const classified = normalizedTweets.map(classifyTweet);
 
   const eventResets = upstreamEvents
-    .filter(event => String(event.type || '').toLowerCase() === 'reset' && !isBanked(textOf(event)))
+    .filter(event => String(event.type || '').toLowerCase() === 'reset' && !isBanked(textOf(event)) && isVerifiedResetEvent(event))
     .map(event => ({
       id: String(event.id),
       at: formatUtc(toDate(event.effective_at || event.announced_at || event.date)),
@@ -162,8 +172,8 @@ function normalizeFeed(raw, source) {
     .filter(event => event.at);
 
   const tweetResets = classified
-    .filter(tweet => tweet.reset && !tweet.banked && !tweet.isReply)
-    .map(tweet => ({ id: tweet.id, at: tweet.at, text: tweet.text, url: tweet.url, source: 'Tibo 动态', confidence: tweet.concrete ? 'high' : 'medium' }));
+    .filter(tweet => tweet.reset && !tweet.banked && !tweet.isReply && !tweet.candidate && tweet.kind === 'reset')
+    .map(tweet => ({ id: tweet.id, at: tweet.at, text: tweet.text, url: tweet.url, source: 'Tibo 动态', confidence: 'high' }));
 
   // Event rows and tweet rows can describe the same reset. Collapse events
   // that land within one operational propagation window (8 hours), keeping
@@ -180,7 +190,7 @@ function normalizeFeed(raw, source) {
   const intervals = resets.slice(1).map((item, index) => (new Date(item.at) - new Date(resets[index].at)) / 86400000).filter(value => value > 0 && value < 60);
   const recentIntervals = intervals.slice(-8);
   const latestReset = resets.at(-1) || null;
-  const latestSignal = classified.find(item => (item.concrete || item.signal === 'watch') && (!latestReset || new Date(item.at) > new Date(latestReset.at))) || null;
+  const latestSignal = classified.find(item => (item.concrete || item.signal === 'watch') && !item.candidate && (!latestReset || new Date(item.at) > new Date(latestReset.at))) || null;
   const baselineDays = median(recentIntervals) || mean(recentIntervals) || 3;
   const p24 = 1 - Math.exp(-1 / baselineDays);
   const p48 = 1 - Math.exp(-2 / baselineDays);
@@ -189,7 +199,8 @@ function normalizeFeed(raw, source) {
   const probability24 = hasStrong ? 0.93 : hasWatch ? 0.83 : Math.min(0.95, p24);
   const probability48 = hasStrong ? 0.98 : hasWatch ? 0.93 : Math.min(0.99, p48);
   const signalWindow = inferWindow(latestSignal);
-  const predictedAt = signalWindow?.start || (latestReset ? formatUtc(new Date(new Date(latestReset.at).getTime() + baselineDays * 86400000)) : null);
+  const historicalPrediction = latestReset ? new Date(new Date(latestReset.at).getTime() + baselineDays * 86400000) : null;
+  const predictedAt = signalWindow?.start || (historicalPrediction && historicalPrediction.getTime() > Date.now() ? formatUtc(historicalPrediction) : null);
   const confidence = hasStrong ? 'high' : hasWatch ? 'medium' : 'low';
 
   return {
@@ -261,6 +272,7 @@ async function loadCrossSource() {
     const dayMatches = [...html.matchAll(/Day\s+(\d+)\b/gi)].map(match => Number(match[1])).filter(Number.isFinite);
     const resetMatch = html.match(/本次重置已完成[^<]{0,180}/i);
     const day = Number(spotlightDay || noticeDay || (dayMatches.length ? Math.max(...dayMatches) : 0)) || null;
+    const officialEvidencePending = /尚未核实官方完成帖/.test(html);
     return {
       name: 'Codex 雷达站',
       url: RADAR_URL,
@@ -268,8 +280,8 @@ async function loadCrossSource() {
       role: 'cross-check',
       day,
       note: {
-        zh: day ? `页面当前标记 Day ${day}；仅作交叉参考，不直接改变概率。` : '页面可访问；未提取到明确 Day 标记。',
-        en: day ? `Page currently shows Day ${day}; cross-check only, not a probability input.` : 'Page reachable; no clear Day marker was extracted.'
+        zh: day ? `页面当前标记 Day ${day}；Day 18 的完成时间未知${officialEvidencePending ? '，官方证据仍待确认' : ''}，不直接改变概率。` : '页面可访问；未提取到明确 Day 标记。',
+        en: day ? `Page currently shows Day ${day}; the Day 18 completion time is unknown${officialEvidencePending ? ' and official evidence is still pending' : ''}; it is not a probability input.` : 'Page reachable; no clear Day marker was extracted.'
       },
       resetNotice: stripTags(resetMatch?.[0] || '') || null
     };
@@ -282,28 +294,59 @@ async function loadCrossSource() {
   }
 }
 
+async function loadTimelineSource() {
+  try {
+    const timeline = await fetchJson(TIMELINE_URL);
+    const events = Array.isArray(timeline?.events) ? timeline.events : [];
+    const pending = events.filter(event => String(event.reset_verification_status || '').toLowerCase() === 'pending').length;
+    const verified = events.filter(isVerifiedResetEvent).length;
+    return {
+      name: 'Codex Reset timeline',
+      url: TIMELINE_URL,
+      status: 'fresh',
+      role: 'validation',
+      note: {
+        zh: `最新时间线 ${events.length} 条；${verified} 条已确认/归档，${pending} 条待确认记录不计入模型。`,
+        en: `${events.length} timeline events; ${verified} confirmed/archive events used, ${pending} pending rows excluded.`
+      },
+      updatedAt: timeline.updated_at || null
+    };
+  } catch (error) {
+    return {
+      name: 'Codex Reset timeline', url: TIMELINE_URL, status: 'unavailable', role: 'validation',
+      note: { zh: '时间线接口暂时不可访问；不会使用未校验记录。', en: 'Timeline endpoint unavailable; unverified rows are excluded.' },
+      error: error instanceof Error ? error.message : String(error)
+    };
+  }
+}
+
 async function loadState(force = false) {
   const fresh = cache.value && Date.now() - cache.fetchedAt < CACHE_MS;
   if (!force && fresh) return cache.value;
   if (cache.promise) return cache.promise;
   cache.promise = (async () => {
     try {
-      const raw = await fetchJson(FEED_URL);
+      const [raw, timelineCheck, radarCheck] = await Promise.all([fetchJson(FEED_URL), loadTimelineSource(), loadCrossSource()]);
       const value = normalizeFeed(raw, `公开 feed · ${new URL(FEED_URL).hostname}`);
       value.sourceChecks = [
-        { name: 'Codex Reset feed', url: FEED_URL, status: 'fresh', role: 'primary', note: { zh: '结构化公开动态与重置事件，参与预测计算。', en: 'Structured public posts and reset events used by the forecast.' } },
-        await loadCrossSource()
+        { name: 'Codex Reset feed', url: FEED_URL, status: 'fresh', role: 'primary', note: { zh: '只把已确认/归档事件纳入历史样本。', en: 'Only confirmed/archive events enter the historical sample.' } },
+        timelineCheck,
+        radarCheck
       ];
+      value.validation = { note: { zh: '两站点都显示 Day 18 已完成，但实际时间未知且官方证据待确认；因此不把这条记录当作精确时间或实时预告。', en: 'Both sites show Day 18 completed, but the actual time is unknown and official evidence is pending; it is not treated as an exact timestamp or live promise.' } };
       cache = { value, fetchedAt: Date.now(), promise: null };
       return value;
     } catch (error) {
       const seed = await readSeed();
       const value = normalizeFeed(seed, '本地种子数据（网络源暂不可用）');
       value.stale = true;
+      const [timelineCheck, radarCheck] = await Promise.all([loadTimelineSource(), loadCrossSource()]);
       value.sourceChecks = [
         { name: 'Codex Reset feed', url: FEED_URL, status: 'unavailable', role: 'primary', note: { zh: '主 feed 不可用，当前使用本地种子数据。', en: 'Primary feed unavailable; using local seed data.' } },
-        await loadCrossSource()
+        timelineCheck,
+        radarCheck
       ];
+      value.validation = { note: { zh: '网络源不可用，当前只展示本地种子数据。', en: 'Network sources unavailable; showing local seed data only.' } };
       value.error = error instanceof Error ? error.message : String(error);
       cache = { value, fetchedAt: Date.now(), promise: null };
       return value;

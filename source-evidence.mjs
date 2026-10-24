@@ -171,13 +171,15 @@ export async function loadCrossSources(overrides = {}) {
   const checks = results.map(result => result.check);
   const evidence = results.map(result => result.evidence);
   const validatedResets = [];
-  const daySummaries = [];
+  const daySummariesZh = [];
+  const daySummariesEn = [];
   for (const day of [17, 18]) {
     const confirmations = evidence.filter(item => item.days?.[day]?.confirmed);
     const watchEvidence = evidence.find(item => item.name === 'Codex Reset Watch' && item.days?.[day]?.confirmed)?.days?.[day];
     const trackerEvidence = evidence.find(item => item.name === 'Reset Tracker' && item.days?.[day]?.confirmed)?.days?.[day];
     if (confirmations.length < 2) {
-      daySummaries.push(`Day ${day} 尚未达到交叉确认门槛`);
+      daySummariesZh.push(`Day ${day} 尚未达到交叉确认门槛`);
+      daySummariesEn.push(`Day ${day} has not reached the cross-check threshold`);
       continue;
     }
     const dateSource = watchEvidence?.at || trackerEvidence?.at || null;
@@ -194,14 +196,15 @@ export async function loadCrossSources(overrides = {}) {
       precision: watchEvidence?.precision || trackerEvidence?.precision || 'date-only',
       evidence: confirmations.map(item => item.name)
     });
-    daySummaries.push(`Day ${day} 已由 ${confirmations.length} 个来源确认`);
+    daySummariesZh.push(`Day ${day} 已由 ${confirmations.length} 个来源确认`);
+    daySummariesEn.push(`Day ${day} is confirmed by ${confirmations.length} sources`);
   }
   const currentDay = checks.find(check => check.name === 'Codex 雷达站')?.day || null;
   const validation = validatedResets.length
     ? {
         note: {
-          zh: `当前为 Day ${currentDay || 19}；${daySummaries.join('；')}。页面显示时间采用对应 Tibo 原帖的公开时间，后台精确执行时刻仍未知。`,
-          en: `Current status is Day ${currentDay || 19}; ${daySummaries.join('; ')}. Displayed times use the corresponding Tibo post timestamps; exact backend execution times remain unknown.`
+          zh: `当前为 Day ${currentDay || 19}；${daySummariesZh.join('；')}。页面显示时间采用对应 Tibo 原帖的公开时间，后台精确执行时刻仍未知。`,
+          en: `Current status is Day ${currentDay || 19}; ${daySummariesEn.join('; ')}. Displayed times use the corresponding Tibo post timestamps; exact backend execution times remain unknown.`
         }
       }
     : {

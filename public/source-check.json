@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T12:23:58.980Z",
+  "generated_at": "2026-10-24T12:27:27.177Z",
   "sourceChecks": [
     {
       "name": "Codex Reset feed",
@@ -20,7 +20,7 @@
         "zh": "最新时间线 79 条；69 条已确认/归档，10 条待确认记录不计入模型。",
         "en": "79 timeline events; 69 confirmed/archive events used, 10 pending rows excluded."
       },
-      "updatedAt": "2026-10-24T12:22:49.455Z"
+      "updatedAt": "2026-10-24T12:26:49.057Z"
     },
     {
       "name": "Codex 雷达站",
@@ -71,7 +71,7 @@
   "validation": {
     "note": {
       "zh": "当前为 Day 19；Day 17 已由 3 个来源确认；Day 18 已由 4 个来源确认。页面显示时间采用对应 Tibo 原帖的公开时间，后台精确执行时刻仍未知。",
-      "en": "Current status is Day 19; Day 17 已由 3 个来源确认; Day 18 已由 4 个来源确认. Displayed times use the corresponding Tibo post timestamps; exact backend execution times remain unknown."
+      "en": "Current status is Day 19; Day 17 is confirmed by 3 sources; Day 18 is confirmed by 4 sources. Displayed times use the corresponding Tibo post timestamps; exact backend execution times remain unknown."
     }
   },
   "validatedResets": [

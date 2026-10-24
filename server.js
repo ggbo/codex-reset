@@ -70,6 +70,11 @@ function isVerifiedResetEvent(event) {
   return event?.confirmed === true || String(event?.confidence || '').toLowerCase() === 'high' || source.includes('archive');
 }
 
+function isMeaningfulResetEvent(event) {
+  const text = textOf(event);
+  return isVerifiedResetEvent(event) || String(event?.observation_result || '').toLowerCase() === 'reset_observed' || isResetClaim(text);
+}
+
 function isResetClaim(text) {
   return /\breset(?:s|ed|ting)?\b/i.test(text) && !/ask(?:ed)?\s+(?:tibo|for)\s+a\s+reset|demand\s+a\s+reset/i.test(text);
 }
@@ -159,6 +164,19 @@ function normalizeFeed(raw, source) {
   })));
   const classified = normalizedTweets.map(classifyTweet);
 
+  const eventRows = upstreamEvents
+    .filter(event => String(event.type || '').toLowerCase() === 'reset' && !isBanked(textOf(event)) && isMeaningfulResetEvent(event))
+    .map(event => ({
+      id: String(event.id),
+      at: formatUtc(toDate(event.effective_at || event.announced_at || event.date)),
+      text: textOf(event),
+      url: event.url || null,
+      source: event.source_label || event.source || '公开记录',
+      confidence: event.confidence || 'medium',
+      status: isVerifiedResetEvent(event) ? 'verified' : 'observed'
+    }))
+    .filter(event => event.at);
+
   const eventResets = upstreamEvents
     .filter(event => String(event.type || '').toLowerCase() === 'reset' && !isBanked(textOf(event)) && isVerifiedResetEvent(event))
     .map(event => ({
@@ -178,6 +196,16 @@ function normalizeFeed(raw, source) {
   // Event rows and tweet rows can describe the same reset. Collapse events
   // that land within one operational propagation window (8 hours), keeping
   // the richer event row when both sources are present.
+  const observedTimeline = [];
+  for (const item of [...eventRows].sort((a, b) => new Date(a.at) - new Date(b.at))) {
+    const previous = observedTimeline.at(-1);
+    if (previous && new Date(item.at) - new Date(previous.at) < 8 * 3600_000) {
+      if (previous.status === 'observed' && item.status === 'verified') observedTimeline[observedTimeline.length - 1] = item;
+      continue;
+    }
+    observedTimeline.push(item);
+  }
+
   const resets = [];
   for (const item of [...eventResets, ...tweetResets].sort((a, b) => new Date(a.at) - new Date(b.at))) {
     const previous = resets.at(-1);
@@ -216,7 +244,9 @@ function normalizeFeed(raw, source) {
       type: latestSignal.signal,
       window: signalWindow
     } : null,
-    timeline: resets.slice(-16).reverse(),
+    timeline: observedTimeline.slice(-24).reverse(),
+    historyDates: observedTimeline.map(item => ({ date: item.at.slice(0, 10), status: item.status, text: item.text, url: item.url })),
+    latestObservedAt: observedTimeline.at(-1)?.at || null,
     recentPosts: classified.slice(0, 16).map(item => ({
       id: item.id, text: item.text, at: item.at, url: item.url, type: item.signal, isReply: item.isReply,
       likes: item.likes, replies: item.replies, reposts: item.reposts

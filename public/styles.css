@@ -85,6 +85,16 @@ h2 { font-size: 18px; letter-spacing: -.04em; margin: 8px 0 0; }
 .source-check i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex: 0 0 auto; }
 .source-check.unavailable i { background: var(--coral); }
 .source-check small { color: #69728f; font: inherit; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.history-panel { margin-top: 14px; }
+.history-calendar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; margin-top: 22px; }
+.history-month h3 { margin: 0 0 12px; color: #dfe5fa; font: 500 14px var(--mono); text-align: center; }
+.history-weekdays, .history-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.history-weekdays { color: var(--muted); font: 9px var(--mono); text-align: center; margin-bottom: 7px; }
+.history-day { min-height: 29px; display: grid; place-items: center; border-radius: 6px; background: rgba(255,255,255,.035); color: #78839f; font: 10px var(--mono); border: 1px solid transparent; }
+.history-day.empty { background: transparent; }
+.history-day.verified { background: rgba(129,224,173,.9); border-color: rgba(129,224,173,.9); color: #06150e; font-weight: 600; }
+.history-day.observed { background: rgba(255,168,89,.95); border-color: rgba(255,168,89,.95); color: #231004; font-weight: 600; }
+@media (max-width: 820px) { .history-calendar { grid-template-columns: 1fr; gap: 20px; } }
 .timeline, .posts { margin-top: 20px; display: flex; flex-direction: column; }
 .timeline-item { display: grid; grid-template-columns: 84px 11px 1fr; gap: 12px; padding: 13px 0; border-top: 1px solid rgba(172,183,231,.09); }
 .timeline-item time, .post-meta { color: var(--muted); font: 10px var(--mono); }

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d1020" />
+    <title>Codex Reset Radar · 重置预测雷达</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Codex Reset Radar 首页">
+          <span class="brand-mark">⌁</span>
+          <span><strong>Codex Reset</strong><small>RADAR</small></span>
+        </a>
+        <div class="topbar-actions">
+          <span class="source-pill"><i></i><span id="source-status">正在连接公开 feed</span></span>
+          <button class="ghost-button lang-button" id="language-button" type="button">EN</button>
+          <button class="ghost-button" id="refresh-button" type="button" data-i18n="refresh">刷新数据 ↻</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow">PUBLIC SIGNAL RADAR / @THSOTTIAUX</div>
+            <h1 data-i18n="heroTitle">下一次 Codex<br /><em>重置会在什么时候？</em></h1>
+            <p class="hero-subtitle" data-i18n="heroSubtitle">抓取 Tibo 的公开动态，识别明确重置信号，再用最近的历史节奏给出一个透明的时间窗口。</p>
+            <div class="disclaimer"><span>ⓘ</span><span data-i18n="disclaimer">概率是公开信息的统计估计，不是 OpenAI 的承诺，也不是账号级用量查询。</span></div>
+          </div>
+          <div class="hero-card">
+            <div class="card-kicker"><span data-i18n="currentJudgement">当前判断</span> <span class="live-dot"></span></div>
+            <div class="forecast-label" id="forecast-basis">正在读取最新信号…</div>
+            <div class="forecast-time" id="forecast-time">—</div>
+            <div class="forecast-meta" id="forecast-meta">—</div>
+            <div class="confidence-row"><span data-i18n="confidence">模型置信度</span><b id="confidence">—</b></div>
+          </div>
+        </section>
+
+        <section class="probability-grid" aria-label="重置概率">
+          <article class="metric-card metric-primary">
+            <div class="metric-top"><span data-i18n="next24">未来 24 小时</span><span class="metric-icon">↗</span></div>
+            <strong id="probability-24">—</strong><span class="metric-unit">%</span>
+            <div class="meter"><span id="meter-24"></span></div>
+            <small id="range-24">公开信号 + 历史节奏</small>
+          </article>
+          <article class="metric-card">
+            <div class="metric-top"><span data-i18n="next48">未来 48 小时</span><span class="metric-icon">◷</span></div>
+            <strong id="probability-48">—</strong><span class="metric-unit">%</span>
+            <div class="meter"><span id="meter-48"></span></div>
+            <small id="range-48">按当前样本滚动计算</small>
+          </article>
+          <article class="metric-card signal-card">
+            <div class="metric-top"><span data-i18n="latestSignal">最新信号</span><span class="signal-badge" id="signal-type">—</span></div>
+            <strong id="signal-title">—</strong>
+            <small id="signal-date">—</small>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <article class="panel cadence-panel">
+            <div class="panel-header"><div><div class="section-label">CADENCE</div><h2 data-i18n="cadenceTitle">最近的重置节奏</h2></div><span class="panel-note" id="cadence-note">—</span></div>
+            <div class="chart" id="cadence-chart" aria-label="重置间隔柱状图"></div>
+            <div class="chart-axis"><span data-i18n="shorter">更近</span><span data-i18n="longer">更久</span></div>
+            <div class="stat-row"><div><span data-i18n="medianInterval">最近中位间隔</span><b id="median-days">—</b></div><div><span data-i18n="sample">当前样本</span><b id="sample-size">—</b></div><div><span data-i18n="lastReset">最近一次</span><b id="last-reset">—</b></div></div>
+          </article>
+          <article class="panel signal-panel">
+            <div class="panel-header"><div><div class="section-label">LATEST SIGNAL</div><h2 data-i18n="whyTitle">为什么这样判断</h2></div></div>
+            <div class="signal-quote"><span class="quote-mark">“</span><p id="signal-text">暂无新的明确重置预告。模型此时只使用历史节奏。</p></div>
+            <a class="source-link" id="signal-link" href="https://x.com/thsottiaux" target="_blank" rel="noreferrer" data-i18n="openTibo">打开 @thsottiaux ↗</a>
+            <div class="method-line"><span class="method-dot"></span><span id="method-copy">—</span></div>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel timeline-panel">
+            <div class="panel-header"><div><div class="section-label">PUBLIC LOG</div><h2 data-i18n="publicLog">公开记录</h2></div><span class="panel-note" data-i18n="utcDisplay">按 UTC 显示</span></div>
+            <div class="timeline" id="timeline"></div>
+          </article>
+          <article class="panel posts-panel">
+            <div class="panel-header"><div><div class="section-label">LIVE FEED</div><h2 data-i18n="recentPosts">最近动态</h2></div><span class="panel-note" data-i18n="classifier">分类器 v0.1</span></div>
+            <div class="posts" id="posts"></div>
+          </article>
+        </section>
+
+        <section class="how-it-works">
+          <div><div class="section-label">METHOD</div><h2 data-i18n="methodTitle">这不是黑箱倒计时</h2></div>
+          <div class="method-steps"><div><b>01</b><span data-i18n="step1">抓取公开动态</span><small data-i18n="step1small">feed → 结构化帖子</small></div><div><b>02</b><span data-i18n="step2">识别重置语义</span><small data-i18n="step2small">区分重置、预告和 banked</small></div><div><b>03</b><span data-i18n="step3">计算历史基线</span><small data-i18n="step3small">最近 8 个完整间隔</small></div></div>
+        </section>
+      </main>
+
+      <footer><span data-i18n="footerIndependent">独立社区工具 · 不代表 OpenAI</span><span><span data-i18n="footerSource">数据源：@thsottiaux 公开动态 · </span><a href="https://codex-reset.com" target="_blank" rel="noreferrer" data-i18n="reference">参考 codex-reset.com</a></span></footer>
+    </div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
+

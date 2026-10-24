@@ -1,0 +1,21 @@
+{
+  "fetched_at": "2026-10-24T08:27:12.979Z",
+  "profile": { "handle": "thsottiaux", "name": "Tibo" },
+  "tweets": [
+    { "id": "2113492502355562875", "text": "Landing tomorrow before 10am PST together with a small ship.", "at": "2026-10-23T04:47:34Z", "url": "https://x.com/thsottiaux/status/2113492502355562875", "is_reply": true, "kind": "candidate" },
+    { "id": "2113492187770175603", "text": "Day 18/ Decisions API is GA, OpenResponses joined the Linux Foundation, we shipped some performance improvements. But yes… that’s a reset!", "at": "2026-10-23T04:46:19Z", "url": "https://x.com/thsottiaux/status/2113492187770175603", "is_reply": false, "kind": "candidate" },
+    { "id": "2113162413008884099", "text": "Lands tomorrow before 10am PST.", "at": "2026-10-22T06:55:54Z", "url": "https://x.com/thsottiaux/status/2113162413008884099", "is_reply": true, "kind": "signal" },
+    { "id": "2113162277688070445", "text": "Day 17/ Bet you thought we forgot, but no, it’s reset day today.", "at": "2026-10-22T06:55:22Z", "url": "https://x.com/thsottiaux/status/2113162277688070445", "is_reply": false, "kind": "candidate" },
+    { "id": "2112432076767289678", "text": "Nevermind, we’re still cooking... and reset. Enjoy.", "at": "2026-10-20T06:33:48Z", "url": "https://x.com/thsottiaux/status/2112432076767289678", "is_reply": false, "kind": "reset" },
+    { "id": "2111918635849801739", "text": "Done and dusted.", "at": "2026-10-17T20:41:00Z", "url": "https://x.com/thsottiaux/status/2111918635849801739", "is_reply": false, "kind": "reset" },
+    { "id": "2111492673890824348", "text": "Reset all propagated. Enjoy the week.", "at": "2026-10-15T06:13:00Z", "url": "https://x.com/thsottiaux/status/2111492673890824348", "is_reply": false, "kind": "reset" },
+    { "id": "2110970000000000001", "text": "Reset all propagated. Sweet dreams.", "at": "2026-10-11T04:01:00Z", "url": "https://x.com/thsottiaux/status/2110970000000000001", "is_reply": false, "kind": "reset" }
+  ],
+  "events": [
+    { "id": "seed-2026-10-20", "type": "reset", "summary": "Nevermind, we’re still cooking... and reset. Enjoy.", "announced_at": "2026-10-20T06:33:48Z", "url": "https://x.com/thsottiaux/status/2112432076767289678", "confidence": "high" },
+    { "id": "seed-2026-10-17", "type": "reset", "summary": "Done and dusted.", "announced_at": "2026-10-17T20:41:00Z", "url": "https://x.com/thsottiaux/status/2111918635849801739", "confidence": "high" },
+    { "id": "seed-2026-10-15", "type": "reset", "summary": "Reset all propagated.", "announced_at": "2026-10-15T06:13:00Z", "url": "https://x.com/thsottiaux/status/2111492673890824348", "confidence": "high" },
+    { "id": "seed-2026-10-11", "type": "reset", "summary": "Reset all propagated.", "announced_at": "2026-10-11T04:01:00Z", "url": "https://x.com/thsottiaux/status/2110970000000000001", "confidence": "high" }
+  ]
+}
+

@@ -1,0 +1,15 @@
+{
+  "name": "codex-reset-radar",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A small Codex reset signal radar powered by public Tibo posts.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

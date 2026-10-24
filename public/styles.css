@@ -99,7 +99,9 @@ h2 { font-size: 18px; letter-spacing: -.04em; margin: 8px 0 0; }
 .timeline-item { display: grid; grid-template-columns: 84px 11px 1fr; gap: 12px; padding: 13px 0; border-top: 1px solid rgba(172,183,231,.09); }
 .timeline-item time, .post-meta { color: var(--muted); font: 10px var(--mono); }
 .timeline-pin { width: 9px; height: 9px; border: 2px solid var(--violet); border-radius: 50%; margin-top: 3px; box-shadow: 0 0 0 4px rgba(149,132,255,.1); }
-.timeline-item:first-child .timeline-pin { border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255,153,127,.1); }
+.timeline-item:first-child .timeline-pin:not(.verified):not(.observed) { border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255,153,127,.1); }
+.timeline-pin.verified { border-color: var(--green); box-shadow: 0 0 0 4px rgba(129,224,173,.12); }
+.timeline-pin.observed { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(255,168,89,.12); }
 .timeline-summary { font-size: 12px; line-height: 1.55; color: #d5daf0; text-decoration: none; }
 .post { padding: 12px 0; border-top: 1px solid rgba(172,183,231,.09); }
 .post:first-child { border-top: 0; padding-top: 0; }

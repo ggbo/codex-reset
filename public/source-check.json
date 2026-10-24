@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T10:52:07.367Z",
+  "generated_at": "2026-10-24T11:49:09.060Z",
   "sourceChecks": [
     {
       "name": "Codex Reset feed",
@@ -7,8 +7,8 @@
       "status": "fresh",
       "role": "primary",
       "note": {
-        "zh": "只把已确认/归档事件纳入历史样本。",
-        "en": "Only confirmed/archive events enter the historical sample."
+        "zh": "只把 feed 中已确认/归档事件，以及多站点交叉确认的记录纳入历史样本。",
+        "en": "Only confirmed/archive feed events and cross-checked records enter the historical sample."
       }
     },
     {
@@ -20,7 +20,7 @@
         "zh": "最新时间线 79 条；69 条已确认/归档，10 条待确认记录不计入模型。",
         "en": "79 timeline events; 69 confirmed/archive events used, 10 pending rows excluded."
       },
-      "updatedAt": "2026-10-24T10:51:02.580Z"
+      "updatedAt": "2026-10-24T11:47:48.887Z"
     },
     {
       "name": "Codex 雷达站",
@@ -29,16 +29,68 @@
       "role": "cross-check",
       "day": 19,
       "note": {
-        "zh": "页面当前标记 Day 19；Day 18 的完成时间未知，官方证据仍待确认，不直接改变概率。",
-        "en": "Page currently shows Day 19; the Day 18 completion time is unknown and official evidence is still pending; it is not a probability input."
+        "zh": "页面当前标记 Day 19；Day 18 已由站点确认，但 Tibo 尚未发布独立完成帖。",
+        "en": "Page currently shows Day 19; Day 18 is confirmed by the site, but Tibo has not posted a separate completion update."
       },
       "resetNotice": "本次重置已完成 · 站长确认"
+    },
+    {
+      "name": "Codex Reset Watch",
+      "url": "https://crw.warpnav.com/",
+      "status": "fresh",
+      "role": "cross-check",
+      "day": 18,
+      "note": {
+        "zh": "独立追踪站记录 Day 18 已到账；界面采用 Tibo 原帖时间，后台精确执行时刻仍未知。",
+        "en": "Independent tracker records Day 18 as landed; the UI uses Tibo’s public post time while the exact backend execution time remains unknown."
+      },
+      "updatedAt": "2026-10-23T17:58:13.332Z"
+    },
+    {
+      "name": "Reset Tracker",
+      "url": "https://reset-tracker.com/",
+      "status": "fresh",
+      "role": "cross-check",
+      "note": {
+        "zh": "独立追踪站将 Day 18 标为已完成，并给出一个记录时间；该时间仍属于第三方报告。",
+        "en": "Independent tracker marks Day 18 complete and reports a timestamp; it remains a third-party report."
+      },
+      "updatedAt": "2026-10-23T17:00:00+00:00"
+    },
+    {
+      "name": "LimitDigest",
+      "url": "https://limitdigest.com/resets/codex/log/",
+      "status": "fresh",
+      "role": "cross-check",
+      "note": {
+        "zh": "日志站将 Day 18 列入 19 天中的已重置日期；未提供独立精确完成时刻。",
+        "en": "Log site includes Day 18 among the resets in the 19-day run; it does not provide an independent exact completion time."
+      }
     }
   ],
   "validation": {
     "note": {
-      "zh": "两站点都显示 Day 18 已完成，但实际时间未知且官方证据待确认；因此不把这条记录当作精确时间或实时预告。",
-      "en": "Both sites show Day 18 completed, but the actual time is unknown and official evidence is pending; it is not treated as an exact timestamp or live promise."
+      "zh": "当前为 Day 19；Day 18 已由 4 个公开追踪来源交叉确认。页面显示时间采用 Tibo 原帖的公开时间（10 月 23 日 12:46，北京时间），后台精确执行时刻仍未知。",
+      "en": "Current status is Day 19; Day 18 is cross-checked by 4 public trackers. The displayed time uses Tibo’s public post timestamp (Oct 23, 04:46 UTC); the exact backend execution time remains unknown."
     }
-  }
+  },
+  "validatedResets": [
+    {
+      "id": "cross-source-day18",
+      "day": 18,
+      "date": "2026-10-23",
+      "at": "2026-10-23T04:46:19.000Z",
+      "text": "Day 18/ Decisions API is GA, OpenResponses joined the Linux Foundation, we shipped some performance improvements and Uber is going all-in on codex & work. But yes… that’s a reset!",
+      "url": "https://x.com/thsottiaux/status/2113492187770175603",
+      "source": "多站点交叉核验",
+      "status": "verified",
+      "precision": "post-timestamp",
+      "evidence": [
+        "Codex 雷达站",
+        "Codex Reset Watch",
+        "Reset Tracker",
+        "LimitDigest"
+      ]
+    }
+  ]
 }

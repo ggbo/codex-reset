@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '7,22,37,52 * * * *'
 
 permissions:
   contents: read
@@ -29,6 +29,8 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
+      - name: Verify automatic reset detection
+        run: npm test && npm run check
       - name: Build source cross-check snapshot
         run: node scripts/build-static-state.mjs
       - name: Upload static site
@@ -38,4 +40,3 @@ jobs:
       - name: Deploy to Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

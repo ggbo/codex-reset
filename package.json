@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check server.js && node --check public/app.js && node --check public/source-evidence.js && node --check scripts/build-static-state.mjs"
   },
   "engines": {
     "node": ">=20"
   }
 }
-

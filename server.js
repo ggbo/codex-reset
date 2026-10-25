@@ -95,9 +95,9 @@ function classifyTweet(tweet) {
   // Timing-only replies can refer to a normal product ship. They are kept in
   // the live feed, but never become a reset signal without explicit reset
   // wording in the same public post.
-  const reset = isResetClaim(text) && !banked;
-  const explicitFuture = reset && /\b(?:will|going\s+to|tomorrow|today|by\s+eod|within|next)\b/i.test(text);
-  const concrete = reset && timing;
+  const reset = (isResetClaim(text) || normalizedKind === 'reset') && !banked;
+  const explicitFuture = !tweet.completed && reset && /\b(?:will|going\s+to|tomorrow|today|by\s+eod|within|next)\b/i.test(text);
+  const concrete = !tweet.completed && reset && timing;
   let signal = 'context';
   if (concrete) signal = 'strong';
   else if (explicitFuture) signal = 'watch';
@@ -166,11 +166,13 @@ function normalizeFeed(raw, source, validatedResets = []) {
     replies: Number(item.replies || 0),
     reposts: Number(item.reposts || 0)
   })));
-  const classified = normalizedTweets.map(classifyTweet);
+  const completedPosts = validatedResets.filter(item => item.at && item.text).map(item => ({ id: String(item.url?.match(/status\/(\d+)/)?.[1] || item.id), at: item.at, text: item.text, textZh: item.textZh, url: item.url, kind: 'reset', completed: true }));
+  const completedIds = new Set(completedPosts.map(item => item.id));
+  const classified = sortNewest([...normalizedTweets.filter(item => !completedIds.has(item.id)), ...completedPosts]).map(classifyTweet);
 
-  const crossDates = new Set(validatedResets.map(item => item.date).filter(Boolean));
+  const crossIds = new Set(validatedResets.flatMap(item => item.relatedIds || [item.url?.match(/status\/(\d+)/)?.[1]]).filter(Boolean));
   const eventRows = upstreamEvents
-    .filter(event => String(event.type || '').toLowerCase() === 'reset' && !isBanked(textOf(event)) && isMeaningfulResetEvent(event))
+    .filter(event => !crossIds.has(String(event.id)) && String(event.type || '').toLowerCase() === 'reset' && !isBanked(textOf(event)) && isMeaningfulResetEvent(event))
     .map(event => ({
       id: String(event.id),
       at: formatUtc(toDate(event.effective_at || event.announced_at || event.date)),
@@ -180,10 +182,10 @@ function normalizeFeed(raw, source, validatedResets = []) {
       confidence: event.confidence || 'medium',
       status: isVerifiedResetEvent(event) ? 'verified' : 'observed'
     }))
-    .filter(event => event.at && !(crossDates.has(event.at.slice(0, 10)) && event.status === 'observed'));
+    .filter(event => event.at);
 
   const eventResets = upstreamEvents
-    .filter(event => String(event.type || '').toLowerCase() === 'reset' && !isBanked(textOf(event)) && isVerifiedResetEvent(event))
+    .filter(event => !crossIds.has(String(event.id)) && String(event.type || '').toLowerCase() === 'reset' && !isBanked(textOf(event)) && isVerifiedResetEvent(event))
     .map(event => ({
       id: String(event.id),
       at: formatUtc(toDate(event.effective_at || event.announced_at || event.date)),
@@ -204,6 +206,7 @@ function normalizeFeed(raw, source, validatedResets = []) {
       id: item.id,
       at: formatUtc(toDate(item.at)),
       text: item.text,
+      textZh: item.textZh,
       url: item.url,
       source: item.source || '多站点交叉核验',
       confidence: 'medium',
@@ -270,7 +273,7 @@ function normalizeFeed(raw, source, validatedResets = []) {
     ],
     latestObservedAt: [...observedTimeline, ...crossSourceRows].at(-1)?.at || null,
     recentPosts: classified.slice(0, 16).map(item => ({
-      id: item.id, text: item.text, at: item.at, url: item.url, type: item.signal, isReply: item.isReply,
+      id: item.id, text: item.text, textZh: item.textZh, at: item.at, url: item.url, type: item.signal, isReply: item.isReply,
       likes: item.likes, replies: item.replies, reposts: item.reposts
     })),
     forecast: {
@@ -409,4 +412,3 @@ server.listen(PORT, () => {
   console.log(`Codex Reset Radar running at http://localhost:${PORT}`);
   console.log(`Feed source: ${FEED_URL}`);
 });
-

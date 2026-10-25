@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T12:27:27.177Z",
+  "generated_at": "2026-10-25T08:34:50.080Z",
   "sourceChecks": [
     {
       "name": "Codex Reset feed",
@@ -17,75 +17,169 @@
       "status": "fresh",
       "role": "validation",
       "note": {
-        "zh": "最新时间线 79 条；69 条已确认/归档，10 条待确认记录不计入模型。",
-        "en": "79 timeline events; 69 confirmed/archive events used, 10 pending rows excluded."
+        "zh": "最新时间线 78 条；69 条已确认/归档，9 条待确认记录不计入模型。",
+        "en": "78 timeline events; 69 confirmed/archive events used, 9 pending rows excluded."
       },
-      "updatedAt": "2026-10-24T12:26:49.057Z"
+      "updatedAt": "2026-10-25T08:33:50.385Z"
     },
     {
       "name": "Codex 雷达站",
       "url": "https://codex-reset-radar.pages.dev/",
-      "status": "fresh",
       "role": "cross-check",
-      "day": 19,
-      "note": {
-        "zh": "页面当前标记 Day 19；Day 17 仍待确认，Day 18 已由站点确认；Tibo 尚未发布独立完成帖。",
-        "en": "Page currently shows Day 19; Day 17 is pending, and Day 18 is confirmed by the site; Tibo has not posted a separate completion update"
-      },
-      "resetNotice": "本次重置已完成 · 站长确认"
+      "status": "fresh",
+      "updatedAt": null
     },
     {
       "name": "Codex Reset Watch",
       "url": "https://crw.warpnav.com/",
-      "status": "fresh",
       "role": "cross-check",
-      "day": 18,
-      "note": {
-        "zh": "独立追踪站记录 Day 17、18 已到账；界面采用 Tibo 原帖时间，后台精确执行时刻仍未知。",
-        "en": "Independent tracker records Day 17 and 18 as landed; the UI uses Tibo’s public post time while the exact backend execution time remains unknown."
-      },
-      "updatedAt": "2026-10-23T17:58:13.332Z"
+      "status": "fresh",
+      "updatedAt": "2026-10-25T06:22:19.542Z"
     },
     {
       "name": "Reset Tracker",
       "url": "https://reset-tracker.com/",
-      "status": "fresh",
       "role": "cross-check",
-      "note": {
-        "zh": "独立追踪站将 Day 17、18 标为已完成，并给出记录时间；这些时间仍属于第三方报告。",
-        "en": "Independent tracker marks Day 17 and 18 complete and reports timestamps; they remain third-party reports."
-      },
-      "updatedAt": "2026-10-23T17:00:00+00:00"
+      "status": "fresh",
+      "updatedAt": null
     },
     {
       "name": "LimitDigest",
       "url": "https://limitdigest.com/resets/codex/log/",
-      "status": "fresh",
       "role": "cross-check",
-      "note": {
-        "zh": "日志站将 Day 17、18 列入已重置日期；未提供独立精确完成时刻。",
-        "en": "Log site includes Day 17 and 18 among the resets; it does not provide an independent exact completion time."
-      }
+      "status": "fresh",
+      "updatedAt": null
     }
   ],
   "validation": {
     "note": {
-      "zh": "当前为 Day 19；Day 17 已由 3 个来源确认；Day 18 已由 4 个来源确认。页面显示时间采用对应 Tibo 原帖的公开时间，后台精确执行时刻仍未知。",
-      "en": "Current status is Day 19; Day 17 is confirmed by 3 sources; Day 18 is confirmed by 4 sources. Displayed times use the corresponding Tibo post timestamps; exact backend execution times remain unknown."
+      "zh": "最新公开进展为 Day 20。Day 20 重置已由 4 个来源交叉核验。显示时间为公开帖子时间，后台精确执行时刻未知。",
+      "en": "Latest public progress: Day 20. Day 20 reset cross-checked by 4 sources. Times refer to public posts; exact backend execution times are unknown."
     }
   },
   "validatedResets": [
+    {
+      "id": "cross-source-day2",
+      "day": 2,
+      "date": "2026-10-07",
+      "at": "2026-10-07T03:35:00.000Z",
+      "text": "Therefore ... the reset has been processed. Enjoy!",
+      "textZh": "因此……重置已经处理完成。尽情使用吧！",
+      "url": "https://x.com/thsottiaux/status/2107676072871600470",
+      "source": "多站点交叉核验",
+      "status": "verified",
+      "precision": "confirmation-post",
+      "relatedIds": [
+        "2107676072871600470"
+      ],
+      "evidence": [
+        "Codex Reset Watch",
+        "Reset Tracker"
+      ]
+    },
+    {
+      "id": "cross-source-day6",
+      "day": 6,
+      "date": "2026-10-10",
+      "at": "2026-10-10T22:15:39.000Z",
+      "text": "Day 6 reset",
+      "textZh": null,
+      "url": "https://x.com/thsottiaux/status/2109045220411351517",
+      "source": "多站点交叉核验",
+      "status": "verified",
+      "precision": "post-timestamp",
+      "relatedIds": [
+        "2109045220411351517",
+        "2109132167112782291"
+      ],
+      "evidence": [
+        "Codex 雷达站",
+        "LimitDigest"
+      ]
+    },
+    {
+      "id": "cross-source-day8",
+      "day": 8,
+      "date": "2026-10-13",
+      "at": "2026-10-13T05:06:06.000Z",
+      "text": "What would you like with your side of reset? It's done.",
+      "textZh": "重置这份配菜，你还想搭点什么？已经完成了。",
+      "url": "https://x.com/thsottiaux/status/2109873287853707513",
+      "source": "多站点交叉核验",
+      "status": "verified",
+      "precision": "confirmation-post",
+      "relatedIds": [
+        "2109812216212099456",
+        "2109873287853707513",
+        "2109812360596865224"
+      ],
+      "evidence": [
+        "Codex 雷达站",
+        "Codex Reset Watch",
+        "Reset Tracker",
+        "LimitDigest"
+      ]
+    },
+    {
+      "id": "cross-source-day10",
+      "day": 10,
+      "date": "2026-10-15",
+      "at": "2026-10-15T06:28:13.000Z",
+      "text": "Done and dusted",
+      "textZh": "已经搞定。",
+      "url": "https://x.com/thsottiaux/status/2110618732666257557",
+      "source": "多站点交叉核验",
+      "status": "verified",
+      "precision": "post-timestamp",
+      "relatedIds": [
+        "2110595484180214059",
+        "2110618732666257557",
+        "2110595554036400151"
+      ],
+      "evidence": [
+        "Codex 雷达站",
+        "Codex Reset Watch"
+      ]
+    },
+    {
+      "id": "cross-source-day13",
+      "day": 13,
+      "date": "2026-10-17",
+      "at": "2026-10-17T21:12:21.000Z",
+      "text": "Done",
+      "textZh": "已完成。",
+      "url": "https://x.com/thsottiaux/status/2111566005684289735",
+      "source": "多站点交叉核验",
+      "status": "verified",
+      "precision": "post-timestamp",
+      "relatedIds": [
+        "2111492673890824348",
+        "2111566005684289735",
+        "2111492738025959922"
+      ],
+      "evidence": [
+        "Codex 雷达站",
+        "Codex Reset Watch",
+        "LimitDigest"
+      ]
+    },
     {
       "id": "cross-source-day17",
       "day": 17,
       "date": "2026-10-22",
       "at": "2026-10-22T06:55:22.000Z",
       "text": "Day 17/ Bet you thought we forgot, but no, it’s reset day today.\n\nAlso good time to remind you to get Daybreak Blue access, it only takes 15 mins and you don’t want to have to do it in the middle of an incident.",
+      "textZh": "第 17 天：你们肯定以为我们忘了，但没有，今天是重置日。\n\n也趁这个机会提醒大家开通 Daybreak Blue 访问权限，只需要 15 分钟；你肯定不想在故障发生时才去办。",
       "url": "https://x.com/thsottiaux/status/2113162277688070445",
       "source": "多站点交叉核验",
       "status": "verified",
       "precision": "post-timestamp",
+      "relatedIds": [
+        "2113162277688070445",
+        "2113162413008884099"
+      ],
       "evidence": [
+        "Codex 雷达站",
         "Codex Reset Watch",
         "Reset Tracker",
         "LimitDigest"
@@ -97,10 +191,37 @@
       "date": "2026-10-23",
       "at": "2026-10-23T04:46:19.000Z",
       "text": "Day 18/ Decisions API is GA, OpenResponses joined the Linux Foundation, we shipped some performance improvements and Uber is going all-in on codex & work. But yes… that’s a reset!",
+      "textZh": "第 18 天：Decisions API 已正式可用，OpenResponses 加入了 Linux 基金会，我们发布了一些性能改进，Uber 正全面采用 Codex 与 Work。没错……又是一次额度重置！",
       "url": "https://x.com/thsottiaux/status/2113492187770175603",
       "source": "多站点交叉核验",
       "status": "verified",
       "precision": "post-timestamp",
+      "relatedIds": [
+        "2113492187770175603",
+        "2113492502355562875"
+      ],
+      "evidence": [
+        "Codex 雷达站",
+        "Codex Reset Watch",
+        "Reset Tracker"
+      ]
+    },
+    {
+      "id": "cross-source-day20",
+      "day": 20,
+      "date": "2026-10-25",
+      "at": "2026-10-25T06:06:16.000Z",
+      "text": "It is all propagated. Enjoy some mad codexing tomorrow. Fun week ahead too.",
+      "textZh": "已经全部生效了。明天尽情用 Codex 大干一场吧，接下来的一周也会很有意思。",
+      "url": "https://x.com/thsottiaux/status/2114237083652882932",
+      "source": "多站点交叉核验",
+      "status": "verified",
+      "precision": "confirmation-post",
+      "relatedIds": [
+        "2114200152701575656",
+        "2114237083652882932",
+        "2114200291319124163"
+      ],
       "evidence": [
         "Codex 雷达站",
         "Codex Reset Watch",

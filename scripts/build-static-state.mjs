@@ -17,8 +17,19 @@ function isVerifiedResetEvent(event) {
 }
 
 async function main() {
+  let feedStatus = 'fresh';
+  try {
+    const response = await fetch(feedUrl, { cache: 'no-store', signal: AbortSignal.timeout(15_000) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const feed = await response.json();
+    if (!Array.isArray(feed.tweets) || !Array.isArray(feed.events)) throw new Error('Invalid feed schema');
+    await writeFile('public/feed.json', JSON.stringify(feed));
+  } catch (error) {
+    feedStatus = 'unavailable';
+    console.warn(`Primary feed snapshot unavailable: ${error}`);
+  }
   const checks = [{
-    name: 'Codex Reset feed', url: feedUrl, status: 'fresh', role: 'primary',
+    name: 'Codex Reset feed', url: feedUrl, status: feedStatus, role: 'primary',
     note: { zh: '只把 feed 中已确认/归档事件，以及多站点交叉确认的记录纳入历史样本。', en: 'Only confirmed/archive feed events and cross-checked records enter the historical sample.' }
   }];
   let timelineCheck;
@@ -43,4 +54,3 @@ async function main() {
 }
 
 main().catch(error => { console.error(error); process.exitCode = 1; });
-
